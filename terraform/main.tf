@@ -1,3 +1,8 @@
+resource "google_project_service" "enable_container_api" {
+  project = var.gcp_project
+  service = "container.googleapis.com"
+}
+
 resource "google_container_cluster" "chatbot_cluster" {
   name     = var.cluster_name
   location = var.gcp_region
@@ -6,6 +11,10 @@ resource "google_container_cluster" "chatbot_cluster" {
   autopilot {
     enabled = true
   }
+
+  depends_on = [
+    google_project_service.enable_container_api
+  ]
 
   # Minimal cluster settings; Autopilot takes care of node provisioning.
   initial_node_count = 1
