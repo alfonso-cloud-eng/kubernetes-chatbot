@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: chatbot
-        image: your_dockerhub_username/chatbot:latest
+        image: alfonsomonserrat/kubernetes-chatbot:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
