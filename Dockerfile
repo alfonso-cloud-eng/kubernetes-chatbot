@@ -1,34 +1,29 @@
 # Use a lightweight Node.js image
 FROM node:16-alpine
 
-# Set the working directory to /app
+# Set working directory to /app
 WORKDIR /app
 
-# ---------------------------
-# Cache dependency installation for server
-# ---------------------------
-# Copy server package files first
-COPY server/package*.json ./server/
-WORKDIR /app/server
-RUN npm install
-
-# ---------------------------
-# Cache dependency installation for client
-# ---------------------------
-# Copy client package files first
-WORKDIR /app/client
-COPY client/package*.json ./
-RUN npm install
-
-# ---------------------------
-# Copy the rest of the source code
-# ---------------------------
-WORKDIR /app
+# Copy the entire project into the container
 COPY . .
+
+# ---------------------------
+# Install server dependencies
+# ---------------------------
+WORKDIR /app/server
+# Use npm install instead of npm ci to avoid lock file mismatch issues.
+RUN npm install
+
+# ---------------------------
+# Install client dependencies
+# ---------------------------
+WORKDIR /app/client
+RUN npm install
 
 # ---------------------------
 # Install concurrently globally to run both processes
 # ---------------------------
+WORKDIR /app
 RUN npm install -g concurrently
 
 # Expose ports for the client (3000) and server (5000)
