@@ -16,9 +16,6 @@ resource "google_container_cluster" "chatbot_cluster" {
     google_project_service.enable_container_api
   ]
 
-  # Minimal cluster settings; Autopilot takes care of node provisioning.
-  initial_node_count = 1
-
   network    = "default"
   subnetwork = "default"
 
