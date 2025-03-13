@@ -25,3 +25,4 @@ resource "google_container_cluster" "chatbot_cluster" {
   # Optional: set master authorized networks if desired
   # master_authorized_networks_config { }
 }
+

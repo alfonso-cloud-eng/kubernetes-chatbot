@@ -23,12 +23,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:latest
+   #   - name: Build and push Docker image
+   #     uses: docker/build-push-action@v3
+   #     with:
+   #       context: .
+   #       push: true
+   #       tags: ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:latest
 
       #################################################
       # 2) Provision / Update GKE Autopilot with Terraform
@@ -51,6 +51,9 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
+
+      - name: Check Terraform version
+        run: terraform version
 
       - name: Terraform Init & Apply
         working-directory: terraform
