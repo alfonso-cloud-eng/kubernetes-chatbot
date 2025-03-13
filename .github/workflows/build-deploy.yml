@@ -34,6 +34,25 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
 
+
+      - name: Cleanup old Docker Hub images
+        run: |
+            current_tag="${{ github.sha }}"
+            echo "Current tag is: $current_tag"
+            # Get list of tags in JSON format using the Docker Hub API
+            tags=$(curl -s -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
+              "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags?page_size=100" \
+              | jq -r '.results[].name')
+            echo "Found tags: $tags"
+            for tag in $tags; do
+              if [ "$tag" != "$current_tag" ]; then
+                 echo "Deleting tag: $tag"
+                 curl -s -X DELETE -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
+                   "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags/$tag/"
+              fi
+            done
+        
+
       #################################################
       # 2) Provision / Update GKE Autopilot with Terraform
       #################################################
