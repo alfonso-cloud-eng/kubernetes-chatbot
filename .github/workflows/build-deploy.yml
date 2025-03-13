@@ -111,6 +111,9 @@ jobs:
             --from-literal=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: check secret
+        run: kubectl get secret openai-api-key -o yaml
+
       - name: Deploy Kubernetes Manifests
         run: |
           kubectl apply -f k8s/deployment.yaml
