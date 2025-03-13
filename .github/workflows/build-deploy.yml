@@ -114,6 +114,11 @@ jobs:
       - name: check secret
         run: kubectl get secret openai-api-key -o yaml
 
+      - name: Check secret length
+        run: |
+          SECRET="${{ secrets.OPENAI_API_KEY }}"
+          echo "Secret length: ${#SECRET}"    
+
       - name: Deploy Kubernetes Manifests
         run: |
           kubectl apply -f k8s/deployment.yaml
