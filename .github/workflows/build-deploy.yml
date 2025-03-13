@@ -110,20 +110,14 @@ jobs:
             kubectl delete secret openai-api-key || true
             kubectl create secret generic openai-api-key \
               --from-literal=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-        
-
-      - name: check secret
-        run: kubectl get secret openai-api-key -o yaml
-
-      - name: Check secret length
-        run: |
-          SECRET="${{ secrets.OPENAI_API_KEY }}"
-          echo "Secret length: ${#SECRET}"    
 
       - name: Deploy Kubernetes Manifests
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+
+      - name: Restart Deployment to make updates
+        run: kubectl rollout restart deployment/chatbot-deployment
 
       #################################################
       # 4) Notify Deployment Status
