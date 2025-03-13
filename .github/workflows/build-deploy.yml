@@ -52,7 +52,28 @@ jobs:
       - name: Check Terraform version
         run: terraform version
 
-      - name: Terraform Init & Apply
+      # First initialize Terraform
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      # Import the existing cluster if it exists
+      - name: Import cluster if exists
+        working-directory: terraform
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_REGION: ${{ secrets.GCP_REGION }}
+          CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+        run: |
+          if gcloud container clusters describe "${CLUSTER_NAME}" --region "${GCP_REGION}" --project "${GCP_PROJECT_ID}" >/dev/null 2>&1; then
+            echo "Cluster exists, importing into Terraform state..."
+            terraform import google_container_cluster.chatbot_cluster projects/${GCP_PROJECT_ID}/locations/${GCP_REGION}/clusters/${CLUSTER_NAME} || echo "Import failed (maybe already imported)"
+          else
+            echo "Cluster does not exist; Terraform will create it."
+          fi
+
+      # Now run apply to create/update the cluster
+      - name: Terraform Apply
         working-directory: terraform
         env:
           TF_VAR_deployer_service_account_email: ${{ secrets.DEPLOYER_SERVICE_ACCOUNT_EMAIL }}
@@ -60,9 +81,7 @@ jobs:
           TF_VAR_gcp_project: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_gcp_region: ${{ secrets.GCP_REGION }}
           TF_VAR_cluster_name: ${{ secrets.CLUSTER_NAME }}
-        run: |
-          terraform init
-          terraform apply -auto-approve
+        run: terraform apply -auto-approve
 
       #################################################
       # 3) Deploy the New Image to GKE
