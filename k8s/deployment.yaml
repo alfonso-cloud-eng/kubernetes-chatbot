@@ -20,6 +20,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
+          name: client
+        - containerPort: 5000
+          name: server
         env:
           - name: OPENAI_API_KEY
             valueFrom:
