@@ -9,6 +9,7 @@ app.use(express.json());
 
 // Configure OpenAI
 console.log("OPENAI_API_KEY is:", process.env.OPENAI_API_KEY ? "set" : "not set");
+console.log("DEBUG: OpenAI API Key:", process.env.OPENAI_API_KEY);
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
