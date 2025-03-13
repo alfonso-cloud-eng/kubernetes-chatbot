@@ -19,3 +19,8 @@ variable "cluster_name" {
   type        = string
   default     = "chatbot-autopilot-cluster"
 }
+
+variable "deployer_service_account_email" {
+  description = "Email of the service account used for deployment (e.g., github-k8s-deployer@your-project.iam.gserviceaccount.com)"
+  type        = string
+}

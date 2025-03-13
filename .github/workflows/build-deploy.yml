@@ -55,6 +55,7 @@ jobs:
       - name: Terraform Init & Apply
         working-directory: terraform
         env:
+          TF_VAR_deployer_service_account_email: ${{ secrets.DEPLOYER_SERVICE_ACCOUNT_EMAIL }}
           TF_VAR_gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
           TF_VAR_gcp_project: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_gcp_region: ${{ secrets.GCP_REGION }}
@@ -62,7 +63,7 @@ jobs:
         run: |
           terraform init
           terraform apply -auto-approve
-          
+
 
       #################################################
       # 3) Deploy the New Image to GKE
