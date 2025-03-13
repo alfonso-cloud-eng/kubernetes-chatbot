@@ -12,6 +12,10 @@ resource "google_container_cluster" "chatbot_cluster" {
     enabled = true
   }
 
+    # For Autopilot clusters, you should remove the default node pool.
+  remove_default_node_pool = true
+  initial_node_count       = 1
+
   depends_on = [
     google_project_service.enable_container_api
   ]
