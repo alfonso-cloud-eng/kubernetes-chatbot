@@ -58,7 +58,7 @@ jobs:
         run: terraform init
 
       # Import the existing cluster if it exists
-      - name: Import cluster if exists
+      - name: Check if GKE Cluster Exists
         working-directory: terraform
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -78,7 +78,7 @@ jobs:
           fi
 
       # Now run apply to create/update the cluster
-      - name: Terraform Apply
+      - name: Create/Update GKE Cluster
         working-directory: terraform
         env:
           TF_VAR_deployer_service_account_email: ${{ secrets.DEPLOYER_SERVICE_ACCOUNT_EMAIL }}
@@ -96,6 +96,10 @@ jobs:
           gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} \
             --region ${{ secrets.GCP_REGION }} \
             --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin --quiet
 
       - name: Create Kubernetes Secret for OpenAI API Key
         run: |
