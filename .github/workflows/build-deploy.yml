@@ -111,3 +111,22 @@ jobs:
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+
+      - name: Get Service External IP
+        id: get-ip
+        run: |
+          echo "Waiting for external IP to be assigned..."
+          # Try for up to 5 minutes (30 iterations x 10 seconds)
+          for i in {1..30}; do
+            EXTERNAL_IP=$(kubectl get svc chatbot-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            if [ -n "$EXTERNAL_IP" ]; then
+              echo "Service external IP: $EXTERNAL_IP"
+              echo "service_ip=$EXTERNAL_IP" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            echo "Still waiting for external IP..."
+            sleep 10
+          done
+          echo "Timed out waiting for external IP" >&2
+          exit 1
+
