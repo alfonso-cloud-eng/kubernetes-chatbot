@@ -39,19 +39,19 @@ jobs:
         run: |
             current_tag="${{ github.sha }}"
             echo "Current tag is: $current_tag"
-            # Get list of tags in JSON format using the Docker Hub API
             tags=$(curl -s -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
               "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags?page_size=100" \
               | jq -r '.results[].name')
             echo "Found tags: $tags"
             for tag in $tags; do
-              if [ "$tag" != "$current_tag" ]; then
-                 echo "Deleting tag: $tag"
-                 curl -s -X DELETE -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-                   "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags/$tag/"
+              if [ "$tag" != "$current_tag" ] && [ "$tag" != "latest" ]; then
+                echo "Attempting to delete tag: $tag"
+                response=$(curl -X DELETE -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
+                  -H "Content-Type: application/json" \
+                  "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags/$tag/")
+                echo "Response for deleting tag $tag: $response"
               fi
-            done
-        
+            done        
 
       #################################################
       # 2) Provision / Update GKE Autopilot with Terraform
