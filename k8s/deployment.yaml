@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: chatbot
-        image: alfonsomonserrat/kubernetes-chatbot:latest
+        image: alfonsomonserrat/kubernetes-chatbot:${IMAGE_TAG}
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
