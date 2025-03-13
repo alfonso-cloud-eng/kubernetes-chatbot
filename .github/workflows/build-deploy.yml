@@ -116,6 +116,10 @@ jobs:
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
 
+      #################################################
+      # 4) Notify Deployment Status
+      #################################################
+
       - name: Wait for Service External IP
         id: get-ip
         run: |
@@ -157,30 +161,34 @@ jobs:
                 });
                 deploymentIssue = newIssue;
               }
-              return { issue_number: deploymentIssue.number };
+              // Explicitly return a JSON string:
+              return JSON.stringify({ issue_number: deploymentIssue.number });
             result-encoding: string
+        
   
       - name: Post Deployment Update Comment
         uses: actions/github-script@v6
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const ip = process.env.SERVICE_IP;
-              if (!ip) {
-                core.setFailed("Service IP not found");
-              }
-              const url = `http://${ip}`;
-              const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
-              const issueNumber = JSON.parse(process.env.ISSUE_INFO).issue_number;
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                body: comment
-              });
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              script: |
+                const ip = process.env.SERVICE_IP;
+                if (!ip) {
+                  core.setFailed("Service IP not found");
+                }
+                const url = `http://${ip}`;
+                const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
+                const issueInfo = JSON.parse(process.env.ISSUE_INFO);
+                const issueNumber = issueInfo.issue_number;
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  body: comment
+                });
         env:
-            SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
-            ISSUE_INFO: ${{ steps.deployment_issue.outputs.result }}
+              SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
+              ISSUE_INFO: ${{ steps.deployment_issue.outputs.result }}
+          
   
 
 
