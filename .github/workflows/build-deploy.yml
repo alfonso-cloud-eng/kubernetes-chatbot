@@ -34,7 +34,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
 
-
       - name: Cleanup old Docker Hub images
         run: |
             current_tag="${{ github.sha }}"
