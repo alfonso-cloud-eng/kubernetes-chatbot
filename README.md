@@ -6,3 +6,4 @@ GCP_REGION: europe-west1 Your GCP region (e.g. us-central1)
 OPENAI_API_KEY: Your OpenAI API key
 DOCKERHUB_ACCESS_TOKEN
 DOCKERHUB_USERNAME
+ 
