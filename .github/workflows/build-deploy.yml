@@ -128,7 +128,7 @@ jobs:
           echo "External IP not found after waiting"
           exit 1
 
-      - name: Post comment with service URL
+      - name: Post deployment status to Issue
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -138,22 +138,15 @@ jobs:
               core.setFailed("Service IP not found");
             }
             const url = `http://${ip}`;
-            const comment = `:tada: The chatbot service is now available at [${url}](${url}).`;
-            if (context.payload.pull_request) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                body: comment
-              });
-            } else {
-              await github.rest.repos.createCommitComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                commit_sha: context.sha,
-                body: comment
-              });
-            }
+            const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
+            // Update or create a comment in issue #1
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 1,
+              body: comment
+            });
         env:
           SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
+
 
