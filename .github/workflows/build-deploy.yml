@@ -128,25 +128,55 @@ jobs:
           echo "External IP not found after waiting"
           exit 1
 
-      - name: Post deployment status to Issue
+      - name: Create or get Deployment Status Issue
+        id: deployment_issue
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const ip = process.env.SERVICE_IP;
-            if (!ip) {
-              core.setFailed("Service IP not found");
-            }
-            const url = `http://${ip}`;
-            const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
-            // Update or create a comment in issue #1
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: 1,
-              body: comment
-            });
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const issueTitle = "Deployment Status";
+              // Try to find an open issue with the title "Deployment Status"
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: "open"
+              });
+              let deploymentIssue = issues.find(issue => issue.title === issueTitle);
+              if (!deploymentIssue) {
+                // If not found, create a new issue
+                const { data: newIssue } = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: issueTitle,
+                  body: "This issue is used to track deployment status updates.",
+                  labels: ["deployment"]
+                });
+                deploymentIssue = newIssue;
+              }
+              return { issue_number: deploymentIssue.number };
+            result-encoding: string
+  
+      - name: Post Deployment Update Comment
+        uses: actions/github-script@v6
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const ip = process.env.SERVICE_IP;
+              if (!ip) {
+                core.setFailed("Service IP not found");
+              }
+              const url = `http://${ip}`;
+              const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
+              const issueNumber = JSON.parse(process.env.ISSUE_INFO).issue_number;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: comment
+              });
         env:
-          SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
+            SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
+            ISSUE_INFO: ${{ steps.deployment_issue.outputs.result }}
+  
 
 
