@@ -150,7 +150,7 @@ jobs:
         run: |
           echo "Waiting for ingress IP..."
           for i in {1..30}; do
-            IP=$(kubectl get ingress chatbot-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+            IP=$(kubectl get ingress chatbot-client-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
             if [ -n "$IP" ]; then
               echo "Found IP: $IP"
               echo "ip=$IP" >> $GITHUB_OUTPUT
