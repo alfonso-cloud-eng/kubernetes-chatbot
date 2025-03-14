@@ -41,7 +41,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
+          tags: ${{ env.DOCKERHUB_USERNAME }}/kubernetes-chatbot:latest
         
       #################################################
       # 2) Set Docker Image Variable
@@ -51,10 +51,10 @@ jobs:
         run: |
           if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" ]; then
             echo "No Docker Hub credentials provided, using default image."
-            echo "docker_image=alfonsomonserrat/kubernetes-chatbot:${{ github.sha }}" >> $GITHUB_OUTPUT
+            echo "docker_image=alfonsomonserrat/kubernetes-chatbot:latest" >> $GITHUB_OUTPUT
           else
             echo "Using user provided Docker Hub credentials."
-            echo "docker_image=${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}" >> $GITHUB_OUTPUT
+            echo "docker_image=${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:latest" >> $GITHUB_OUTPUT
           fi
 
       #################################################
