@@ -43,7 +43,6 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
         
-
       #################################################
       # 2) Set Docker Image Variable
       #################################################
