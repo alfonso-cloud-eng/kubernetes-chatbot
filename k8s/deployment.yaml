@@ -19,22 +19,13 @@ spec:
         image: alfonsomonserrat/kubernetes-chatbot:${IMAGE_TAG}
         imagePullPolicy: Always
         ports:
-          - containerPort: 3000
-            name: client
-          - containerPort: 5000
-            name: server
+        - containerPort: 3000
+          name: client
+        - containerPort: 5000
+          name: server
         env:
           - name: OPENAI_API_KEY
             valueFrom:
               secretKeyRef:
                 name: openai-api-key
                 key: OPENAI_API_KEY
-        # Mount the updated index.html (with the external IP injected) over the client’s index.html.
-        volumeMounts:
-          - name: client-config
-            mountPath: /app/client/public/index.html
-            subPath: index.html
-      volumes:
-        - name: client-config
-          configMap:
-            name: client-config
