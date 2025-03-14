@@ -43,26 +43,6 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
 
-      - name: Cleanup old Docker Hub images
-        run: |
-          current_tag="${{ github.sha }}"
-          echo "Current tag is: $current_tag"
-          tags=$(curl -s -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-            "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags?page_size=100" \
-            | jq -r '.results[].name')
-          echo "Found tags: $tags"
-          for tag in $tags; do
-            if [ "$tag" != "$current_tag" ] && [ "$tag" != "latest" ]; then
-              echo "Attempting to delete tag: $tag"
-              response=$(curl -X DELETE -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-                -H "Content-Type: application/json" \
-                "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags/$tag/")
-              echo "Response for deleting tag $tag: $response"
-            fi
-          done
-
-        
-
       #################################################
       # 2) Set Docker Image Variable
       #################################################
