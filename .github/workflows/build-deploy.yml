@@ -135,13 +135,6 @@ jobs:
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
 
-      - name: Restart Deployment to make updates
-        run: kubectl rollout restart deployment/chatbot-deployment
-
-      #################################################
-      # 4) Notify Deployment Status
-      #################################################
-
       - name: Wait for Service External IP
         id: get-ip
         run: |
@@ -150,13 +143,28 @@ jobs:
             IP=$(kubectl get svc chatbot-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
             if [ -n "$IP" ]; then
               echo "External IP found: $IP"
-              echo "ip=$IP" >> $GITHUB_OUTPUT
+              echo "EXTERNAL_IP=$IP" >> $GITHUB_OUTPUT
               exit 0
             fi
             sleep 10
           done
-          echo "External IP not found after waiting"
+          echo "External IP not found!"
           exit 1
+
+      - name: Update Client ConfigMap with External IP
+        run: |
+            export EXTERNAL_IP=${{ steps.get-ip.outputs.EXTERNAL_IP }}
+            # Replace the placeholder __EXTERNAL_IP__ with the actual external IP in index.html
+            sed "s/__EXTERNAL_IP__/${EXTERNAL_IP}/g" client/public/index.html > client/public/index.updated.html
+            # Create (or update) a ConfigMap from the updated index.html
+            kubectl create configmap client-config --from-file=index.html=client/public/index.updated.html --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Restart Deployment to make updates
+        run: kubectl rollout restart deployment/chatbot-deployment
+
+      #################################################
+      # 4) Notify Deployment Status
+      #################################################
 
       - name: Create or get Deployment Status Issue
         id: deployment_issue
