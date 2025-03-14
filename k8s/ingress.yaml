@@ -8,7 +8,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/chat
+      - path: /api
         pathType: Prefix
         backend:
           service:
