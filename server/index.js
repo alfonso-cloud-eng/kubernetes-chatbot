@@ -1,6 +1,5 @@
 const fs = require('fs');
-
-// Conditionally load .env only if it exists (e.g. for local development).
+// Only load .env if it exists (for local development)
 if (fs.existsSync('.env')) {
   require('dotenv').config();
 }
@@ -13,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Debug log: verify that the environment variable is set.
+// Debug log to verify that the environment variable is set
 console.log("OPENAI_API_KEY is:", process.env.OPENAI_API_KEY ? "set" : "not set");
 
 const configuration = new Configuration({
@@ -21,24 +20,17 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+// Health check endpoint for Ingress health checking
+app.get('/healthz', (req, res) => res.status(200).send('OK'));
+
 // Endpoint to send messages to ChatGPT
 app.post('/api/chat', async (req, res) => {
   try {
     const { messages } = req.body; 
-    /*
-      messages is an array of objects:
-      [
-        { role: 'system' or 'user' or 'assistant', content: '...' },
-        ...
-      ]
-      We’ll send this conversation to the OpenAI API.
-    */
-
     const completion = await openai.createChatCompletion({
       model: 'gpt-4o-mini',
       messages
     });
-
     const responseContent = completion.data.choices[0].message.content;
     res.json({ content: responseContent });
   } catch (error) {

@@ -135,7 +135,8 @@ jobs:
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/chatbot-client-service.yaml
           kubectl apply -f k8s/chatbot-server-service.yaml
-          kubectl apply -f k8s/ingress.yaml
+          kubectl apply -f k8s/chatbot-client-ingress.yaml
+          kubectl apply -f k8s/chatbot-server-ingress.yaml
 
       - name: Restart Deployment to make updates
         run: kubectl rollout restart deployment/chatbot-deployment
