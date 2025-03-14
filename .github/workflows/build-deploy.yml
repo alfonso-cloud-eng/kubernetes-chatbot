@@ -13,57 +13,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #################################################
-      # 1) Build & Push the Docker Image to Docker Hub
+      # 1) (Optional) Build & Push the Docker Image to Docker Hub
       #################################################
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
+        
       - name: Log in to Docker Hub
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_ACCESS_TOKEN }}
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Conditional Docker Hub Build/Push
+        id: buildpush
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_ACCESS_TOKEN }}
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}
 
-      - name: Cleanup old Docker Hub images
+      #################################################
+      # 2) Set Docker Image Variable
+      #################################################
+      - name: Set Docker Image Variable
+        id: set-image
         run: |
-            current_tag="${{ github.sha }}"
-            echo "Current tag is: $current_tag"
-            tags=$(curl -s -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-              "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags?page_size=100" \
-              | jq -r '.results[].name')
-            echo "Found tags: $tags"
-            for tag in $tags; do
-              if [ "$tag" != "$current_tag" ] && [ "$tag" != "latest" ]; then
-                echo "Attempting to delete tag: $tag"
-                response=$(curl -X DELETE -u "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" \
-                  -H "Content-Type: application/json" \
-                  "https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot/tags/$tag/")
-                echo "Response for deleting tag $tag: $response"
-              fi
-            done        
+          if [ -z "${{ secrets.DOCKERHUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" ]; then
+            echo "No Docker Hub credentials provided, using default image."
+            echo "docker_image=alfonsomonserrat/kubernetes-chatbot:${{ github.sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "Using user provided Docker Hub credentials."
+            echo "docker_image=${{ secrets.DOCKERHUB_USERNAME }}/kubernetes-chatbot:${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
 
       #################################################
-      # 2) Provision / Update GKE Autopilot with Terraform
+      # 3) Provision / Update GKE Autopilot with Terraform
       #################################################
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2
         with:
-            credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
   
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-            project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
   
       - name: Verify authentication
         run: gcloud auth list
@@ -71,15 +70,10 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: Check Terraform version
-        run: terraform version
-
-      # First initialize Terraform
       - name: Terraform Init
         working-directory: terraform
         run: terraform init
 
-      # Import the existing cluster if it exists
       - name: Check if GKE Cluster Exists
         working-directory: terraform
         env:
@@ -99,7 +93,6 @@ jobs:
             echo "Cluster does not exist; Terraform will create it."
           fi
 
-      # Now run apply to create/update the cluster
       - name: Create/Update GKE Cluster
         working-directory: terraform
         env:
@@ -111,7 +104,7 @@ jobs:
         run: terraform apply -auto-approve
 
       #################################################
-      # 3) Deploy the New Image to GKE
+      # 4) Deploy the New Image to GKE
       #################################################
       - name: Get GKE Credentials
         run: |
@@ -132,7 +125,7 @@ jobs:
       - name: Deploy Kubernetes Manifests
         run: |
           export IMAGE_TAG=${{ github.sha }}
-          export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+          export DOCKER_IMAGE=${{ steps.set-image.outputs.docker_image }}
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
 
@@ -140,9 +133,8 @@ jobs:
         run: kubectl rollout restart deployment/chatbot-deployment
 
       #################################################
-      # 4) Notify Deployment Status
+      # 5) Notify Deployment Status (optional)
       #################################################
-
       - name: Wait for Service External IP
         id: get-ip
         run: |
@@ -163,55 +155,47 @@ jobs:
         id: deployment_issue
         uses: actions/github-script@v6
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const issueTitle = "Deployment Status";
-              // Try to find an open issue with the title "Deployment Status"
-              const { data: issues } = await github.rest.issues.listForRepo({
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issueTitle = "Deployment Status";
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open"
+            });
+            let deploymentIssue = issues.find(issue => issue.title === issueTitle);
+            if (!deploymentIssue) {
+              const { data: newIssue } = await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                state: "open"
+                title: issueTitle,
+                body: "This issue is used to track deployment status updates.",
+                labels: ["deployment"]
               });
-              let deploymentIssue = issues.find(issue => issue.title === issueTitle);
-              if (!deploymentIssue) {
-                // If not found, create a new issue
-                const { data: newIssue } = await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issueTitle,
-                  body: "This issue is used to track deployment status updates.",
-                  labels: ["deployment"]
-                });
-                deploymentIssue = newIssue;
-              }
-              // Explicitly return a JSON string:
-              return JSON.stringify({ issue_number: deploymentIssue.number });
-            result-encoding: string
-        
-  
+              deploymentIssue = newIssue;
+            }
+            return JSON.stringify({ issue_number: deploymentIssue.number });
+          result-encoding: string
+
       - name: Post Deployment Update Comment
         uses: actions/github-script@v6
         with:
-              github-token: ${{ secrets.GITHUB_TOKEN }}
-              script: |
-                const ip = process.env.SERVICE_IP;
-                if (!ip) {
-                  core.setFailed("Service IP not found");
-                }
-                const url = `http://${ip}`;
-                const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
-                const issueInfo = JSON.parse(process.env.ISSUE_INFO);
-                const issueNumber = issueInfo.issue_number;
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  body: comment
-                });
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const ip = process.env.SERVICE_IP;
+            if (!ip) {
+              core.setFailed("Service IP not found");
+            }
+            const url = `http://${ip}`;
+            const comment = `:tada: Deployment update: The chatbot service is now available at [${url}](${url}).`;
+            const issueInfo = JSON.parse(process.env.ISSUE_INFO);
+            const issueNumber = issueInfo.issue_number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment
+            });
         env:
-              SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
-              ISSUE_INFO: ${{ steps.deployment_issue.outputs.result }}
-          
-  
-
-
+          SERVICE_IP: ${{ steps.get-ip.outputs.ip }}
+          ISSUE_INFO: ${{ steps.deployment_issue.outputs.result }}
