@@ -7,8 +7,8 @@ spec:
     app: chatbot
   ports:
     - name: client
-      port: 3000
-      targetPort: 3000
+      port: 80
+      targetPort: client  # Matches the container port named "client" (3000)
     - name: server
       port: 5000
-      targetPort: 5000
+      targetPort: server  # Matches the container port named "server" (5000)
