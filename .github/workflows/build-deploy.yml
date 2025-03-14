@@ -132,6 +132,7 @@ jobs:
       - name: Deploy Kubernetes Manifests
         run: |
           export IMAGE_TAG=${{ github.sha }}
+          export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
 
