@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: chatbot-ingress
   annotations:
-    kubernetes.io/ingress.class: "gce"   # For GKE Autopilot using the GCE Ingress controller
+    kubernetes.io/ingress.class: "gce"  # For GKE Autopilot using the GCE Ingress controller.
 spec:
   rules:
   - http:
@@ -12,13 +12,13 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: chatbot-service
+            name: chatbot-server-service
             port:
-              name: server
+              number: 5000
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: chatbot-service
+            name: chatbot-client-service
             port:
-              name: client
+              number: 80
