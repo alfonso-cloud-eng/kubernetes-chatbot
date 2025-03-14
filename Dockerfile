@@ -8,8 +8,8 @@ WORKDIR /app
 # Cache dependency installation for server
 # ---------------------------
 # Copy server package files first
-COPY server/package*.json ./server/
 WORKDIR /app/server
+COPY server/package*.json ./
 RUN npm install
 
 # ---------------------------

@@ -3,18 +3,12 @@ kind: Service
 metadata:
   name: chatbot-service
 spec:
-  type: LoadBalancer
   selector:
     app: chatbot
   ports:
-    # This maps external port 80 -> container port 3000 for the React client
-    - name: http-client
-      protocol: TCP
-      port: 80
+    - name: client
+      port: 3000
       targetPort: 3000
-
-    # This maps external port 5000 -> container port 5000 for the Node server
-    - name: http-server
-      protocol: TCP
+    - name: server
       port: 5000
       targetPort: 5000

@@ -134,6 +134,7 @@ jobs:
           export IMAGE_TAG=${{ github.sha }}
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/ingress.yaml
 
       - name: Restart Deployment to make updates
         run: kubectl rollout restart deployment/chatbot-deployment
@@ -142,20 +143,20 @@ jobs:
       # 4) Notify Deployment Status
       #################################################
 
-      - name: Wait for Service External IP
+      - name: Wait for Ingress IP
         id: get-ip
         run: |
-          echo "Waiting for external IP..."
+          echo "Waiting for ingress IP..."
           for i in {1..30}; do
-            IP=$(kubectl get svc chatbot-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+            IP=$(kubectl get ingress chatbot-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
             if [ -n "$IP" ]; then
-              echo "External IP found: $IP"
+              echo "Found IP: $IP"
               echo "ip=$IP" >> $GITHUB_OUTPUT
               exit 0
             fi
             sleep 10
           done
-          echo "External IP not found after waiting"
+          echo "No Ingress IP found!"
           exit 1
 
       - name: Create or get Deployment Status Issue
