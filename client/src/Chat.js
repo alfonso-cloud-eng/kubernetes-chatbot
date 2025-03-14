@@ -14,7 +14,8 @@ function Chat() {
     setInput('');
 
     try {
-      const response = await fetch('http://130.211.105.234:5000/api/chat', {
+      // Only a relative path: "/api/chat"
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: newMessages })
