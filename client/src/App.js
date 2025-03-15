@@ -3,7 +3,14 @@ import Chat from './Chat';
 
 function App() {
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',      // Fills #root's 100vh
+        overflow: 'hidden'   // Ensures we don't scroll the entire page, only in the chat
+      }}
+    >
       <h1
         style={{
           fontSize: '1.5rem',
@@ -15,7 +22,11 @@ function App() {
       >
         ChatGPT Chatbot
       </h1>
-      <Chat />
+
+      {/* The chat takes the remaining space after the heading */}
+      <div style={{ flex: 1 }}>
+        <Chat />
+      </div>
     </div>
   );
 }

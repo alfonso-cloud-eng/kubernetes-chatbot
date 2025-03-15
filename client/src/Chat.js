@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 
 function Chat() {
@@ -6,7 +6,7 @@ function Chat() {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom when messages change
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -45,31 +45,31 @@ function Chat() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',      // Fills the parent's space (App -> #root)
+        height: '100%',       // Fill the parent container's height
         backgroundColor: '#444654',
         borderRadius: '8px',
-        overflow: 'hidden',  // The container won't resize, old msgs scroll
+        overflow: 'hidden'
       }}
     >
-      {/* Messages container */}
+      {/* The scrollable area with messages */}
       <div
         style={{
-          flex: 1,                // Expands to fill available vertical space
-          overflowY: 'auto',      // Scrollable if messages exceed space
+          flex: 1,                     // Takes all remaining space above input bar
+          overflowY: 'auto',           // Scroll if messages exceed container
           display: 'flex',
-          flexDirection: 'column', 
-          justifyContent: 'flex-end', // Align messages at the bottom
+          flexDirection: 'column',     // Top to bottom
+          justifyContent: 'flex-start',
           padding: '16px'
         }}
       >
         {messages.map((msg, idx) => (
           <ChatMessage key={idx} role={msg.role} content={msg.content} />
         ))}
-        {/* Dummy div to ensure we can scroll to the bottom */}
+        {/* Keep an always-present ref at the bottom to auto-scroll */}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input bar pinned at bottom */}
+      {/* The pinned input bar */}
       <div
         style={{
           display: 'flex',

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title style="margin-top: 3em;">ChatGPT Chatbot</title>
+    <title>ChatGPT Chatbot</title>
 
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -20,22 +20,29 @@
         box-sizing: border-box;
       }
 
+      /* Ensure html/body are 100% so we can do a full-height container */
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
       body {
         font-family: 'Poppins', sans-serif;
         background-color: #343541; /* Dark background */
         color: #fff;
-        height: 100vh;
-        overflow: hidden; /* Helps on mobile to prevent extra scroll issues */
+        /* Overflow hidden can help on mobile, but if you need body scrolling, remove it */
+        overflow: hidden; 
       }
 
+      /* The #root container takes up the full screen height */
       #root {
-        max-width: 900px;
-        width: 100%;
-        margin: 0 auto;
         height: 100vh;         /* Occupies full viewport height */
         display: flex;
         flex-direction: column;
-        /* There's a heading in App.js, so the chat can fill the remainder */
+        max-width: 900px;
+        margin: 0 auto;
       }
 
       /* Keyframes for fade-in animation */
@@ -51,7 +58,7 @@
       }
 
       /* Mobile adjustments: bigger font, a more “app-like” vibe */
-      @media (max-width: 1000px) {
+      @media (max-width: 600px) {
         body {
           font-size: 1.05rem;
         }
