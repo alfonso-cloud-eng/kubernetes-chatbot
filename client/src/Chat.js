@@ -99,7 +99,7 @@ function Chat() {
             backgroundColor: '#3f3f46',
             color: '#fff',
             outline: 'none',
-            fontSize: '1rem'
+            fontSize: '1.1rem'
           }}
         />
         <button
@@ -112,7 +112,7 @@ function Chat() {
             color: '#fff',
             fontWeight: 'bold',
             cursor: 'pointer',
-            fontSize: '1rem',
+            fontSize: '1.1rem',
             transition: 'background-color 0.2s ease-in-out'
           }}
         >
