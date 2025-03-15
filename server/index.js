@@ -1,6 +1,5 @@
 const fs = require('fs');
-
-// Conditionally load .env only if it exists (e.g. for local development)
+// Conditionally load .env only if it exists (for local development)
 if (fs.existsSync('.env')) {
   require('dotenv').config();
 }
@@ -22,7 +21,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-// Endpoint to send messages to ChatGPT
+// API endpoint for chatbot
 app.post('/api/chat', async (req, res) => {
   try {
     const { messages } = req.body;
@@ -40,15 +39,13 @@ app.post('/api/chat', async (req, res) => {
 
 // In production, serve the static files from the React app build folder.
 if (process.env.NODE_ENV === 'production') {
-  // Serve static files from the client build directory
   app.use(express.static(path.join(__dirname, '../client/build')));
-  
-  // For any route not handled by your API, serve the index.html file.
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
 }
 
+// Listen on the port specified by the environment (set to 80 in production)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is listening on port ${PORT}`);

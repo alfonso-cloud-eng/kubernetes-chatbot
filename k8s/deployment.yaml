@@ -19,11 +19,13 @@ spec:
         image: ${DOCKER_IMAGE}  # Set via envsubst in your workflow
         imagePullPolicy: Always
         ports:
-          - containerPort: 80    # for the client (static files)
-            name: client
-          - containerPort: 5000  # for the API server
-            name: server
+          - containerPort: 80
+            name: web
         env:
+          - name: NODE_ENV
+            value: production
+          - name: PORT
+            value: "80"
           - name: OPENAI_API_KEY
             valueFrom:
               secretKeyRef:
