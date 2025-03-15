@@ -44,7 +44,7 @@ function App() {
           textAlign: 'center',
           color: '#a2a2a2',
           marginBottom: '1rem',
-          lineHeight: '1em'
+          lineHeight: '4em'
         }}
       >
         <br/>
