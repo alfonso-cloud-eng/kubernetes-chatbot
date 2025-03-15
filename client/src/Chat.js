@@ -13,12 +13,12 @@ function Chat() {
     setMessages(newMessages);
     setInput('');
 
-    try {
-      const response = await fetch(`${window.location.protocol}//${window.location.hostname}:5000/api/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages })
-      });
+try {
+  const response = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages: newMessages })
+  });
 
       const data = await response.json();
       if (response.ok) {
