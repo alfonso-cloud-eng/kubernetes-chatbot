@@ -23,6 +23,16 @@ function App() {
       >
         ChatGPT Chatbot
       </h1>
+      <p
+        style={{
+          textAlign: 'center',
+          color: '#ffffff',
+          marginBottom: '1rem',
+          fontSize: '0.7rem'
+        }}
+      >
+        by alfonso.cloud.eng@gmail.com<br/>Hosted on Google Kubernetes Engine
+      </p>
 
       {/* Container that Chat occupies */}
       <div style={{ flex: 1, position: 'relative' }}>

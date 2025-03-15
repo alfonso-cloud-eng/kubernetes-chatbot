@@ -79,6 +79,7 @@ function Chat() {
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
+          paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
           backgroundColor: '#343541',
           boxSizing: 'border-box',
           height: 60 // approximate input bar height
@@ -86,7 +87,7 @@ function Chat() {
       >
         <input
           type="text"
-          placeholder="Type your message..."
+          placeholder="Ask me anything..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }}
