@@ -18,7 +18,7 @@ function App() {
           textAlign: 'center',
           color: '#fff',
           flexShrink: 0,
-          marginBottom: '-1em'
+          marginBottom: '-0.5em'
         }}
       >
         ChatGPT Chatbot
