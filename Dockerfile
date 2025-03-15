@@ -1,39 +1,34 @@
-# Use a lightweight Node.js image
-FROM node:16-alpine
-
-# Set the working directory to /app
-WORKDIR /app
-
-# ---------------------------
-# Cache dependency installation for server
-# ---------------------------
-# Copy server package files first
-COPY server/package*.json ./server/
-WORKDIR /app/server
-RUN npm install
-
-# ---------------------------
-# Cache dependency installation for client
-# ---------------------------
-# Copy client package files first
+# Stage 1: Build the React Client
+FROM node:16-alpine AS client-builder
 WORKDIR /app/client
+# Copy only the package files first for caching
 COPY client/package*.json ./
 RUN npm install
+# Copy the rest of the client source and build it
+COPY client/ ./
+RUN npm run build
 
-# ---------------------------
-# Copy the rest of the source code
-# ---------------------------
+# Stage 2: Build the Node Server
+FROM node:16-alpine
 WORKDIR /app
-COPY . .
 
-# ---------------------------
-# Install concurrently globally to run both processes
-# ---------------------------
-RUN npm install -g concurrently
+# Install server dependencies
+WORKDIR /app/server
+COPY server/package*.json ./
+RUN npm install
 
-# Expose ports for the client (3000) and server (5000)
-EXPOSE 3000
+# Copy the server source code
+COPY server/ ./
+
+# Copy the production build from the client
+COPY --from=client-builder /app/client/build ./client/build
+
+# Expose ports: assume Node serves API on port 5000 and static files on port 80.
+EXPOSE 80
 EXPOSE 5000
 
-# Start both the server and client concurrently
-CMD ["sh", "-c", "concurrently \"cd server && npm start\" \"cd client && npm start\""]
+# Set NODE_ENV to production so that dotenv is not loaded.
+ENV NODE_ENV=production
+
+# Start the server (make sure your index.js is configured to serve static files)
+CMD ["node", "index.js"]

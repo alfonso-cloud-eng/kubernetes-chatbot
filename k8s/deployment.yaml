@@ -16,12 +16,12 @@ spec:
     spec:
       containers:
       - name: chatbot
-        image: ${DOCKER_IMAGE}
+        image: ${DOCKER_IMAGE}  # Set via envsubst in your workflow
         imagePullPolicy: Always
         ports:
-          - containerPort: 3000
+          - containerPort: 80    # for the client (static files)
             name: client
-          - containerPort: 5000
+          - containerPort: 5000  # for the API server
             name: server
         env:
           - name: OPENAI_API_KEY
