@@ -16,7 +16,6 @@ function App() {
           fontSize: '1.5rem',
           fontWeight: '700',
           textAlign: 'center',
-          marginBottom: '1rem',
           color: '#fff',
           flexShrink: 0
         }}
@@ -28,7 +27,7 @@ function App() {
           textAlign: 'center',
           color: '#ffffff',
           marginBottom: '1rem',
-          fontSize: '0.7rem'
+          fontSize: '0.9rem'
         }}
       >
         by alfonso.cloud.eng@gmail.com<br/>Hosted on Google Kubernetes Engine
