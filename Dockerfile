@@ -8,7 +8,7 @@ RUN npm install
 COPY client/ ./
 RUN npm run build
 
-# Stage 2: Build the Node Server
+# Stage 2: Build the Node Server 
 FROM node:16-alpine
 WORKDIR /app
 
