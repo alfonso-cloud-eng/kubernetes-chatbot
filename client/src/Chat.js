@@ -4,12 +4,12 @@ import ChatMessage from './ChatMessage';
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const messageContainerRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
-  // Scroll to bottom when messages change
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -38,39 +38,41 @@ function Chat() {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',            // Fixed height container
+        position: 'relative',
+        height: '100%',              // Fixed height (inherited from parent)
         backgroundColor: '#444654',
         borderRadius: '8px',
         overflow: 'hidden'
       }}
     >
-      {/* Scrollable messages area */}
+      {/* Scrollable Messages Area */}
       <div
-        ref={messageContainerRef}
+        ref={messagesContainerRef}
         style={{
-          flex: 1,               // Fill available space above the input bar
-          overflowY: 'auto',     // Scrollable if messages exceed container
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end', // Messages start at the bottom
-          padding: '16px'
+          height: '100%',
+          overflowY: 'auto',
+          padding: '16px',
+          paddingBottom: '70px',    // Extra padding to ensure the last message isn't hidden behind the input bar
+          boxSizing: 'border-box'
         }}
       >
         {messages.map((msg, idx) => (
           <ChatMessage key={idx} role={msg.role} content={msg.content} />
         ))}
       </div>
-      {/* Pinned input bar */}
+
+      {/* Fixed Input Bar */}
       <div
         style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
           display: 'flex',
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
-          backgroundColor: '#343541',
-          flexShrink: 0         // Keep input bar fixed
+          backgroundColor: '#343541'
         }}
       >
         <input
