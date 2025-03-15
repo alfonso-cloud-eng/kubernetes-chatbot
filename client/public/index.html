@@ -25,10 +25,10 @@
         background-color: #343541; /* Dark background */
         color: #fff;
         min-height: 100vh;
+        overflow: hidden; /* Helps on mobile to prevent extra scroll issues */
       }
 
       #root {
-        /* Center the main app container */
         max-width: 900px;
         width: 100%;
         margin: 0 auto;
@@ -37,12 +37,25 @@
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
-        /* A bit of spacing on mobile */
+        height: 100vh; /* Occupies full viewport height */
       }
 
-      @media (max-width: 600px) {
+      /* Mobile adjustments */
+      @media (max-width: 1000px) {
         #root {
-          padding: 10px;
+          padding: 5px;
+        }
+      }
+
+      /* Keyframes for fade-in animation */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
         }
       }
     </style>

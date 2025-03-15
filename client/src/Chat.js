@@ -9,17 +9,15 @@ function Chat() {
     if (!input.trim()) return;
 
     const newMessages = [...messages, { role: 'user', content: input.trim() }];
-
     setMessages(newMessages);
     setInput('');
 
-try {
-  const response = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: newMessages })
-  });
-
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages })
+      });
       const data = await response.json();
       if (response.ok) {
         setMessages((prev) => [
@@ -39,11 +37,11 @@ try {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#444654', /* ChatGPT-like darker panel */
+        backgroundColor: '#444654', // ChatGPT-like darker panel
         borderRadius: '8px',
-        height: '70vh',  /* Adjust for your preference */
-        minHeight: '400px',
-        overflow: 'hidden', /* Hide overflow except for message area */
+        flex: 1,                // Takes remaining vertical space
+        overflow: 'hidden',     // Hide overflow except for the scrollable area
+        position: 'relative'
       }}
     >
       {/* Messages Container */}
@@ -52,6 +50,8 @@ try {
           flex: 1,
           padding: '16px',
           overflowY: 'auto',
+          // On mobile, we want a bit more “app” feeling
+          // so we adjust spacing if needed. This is optional.
         }}
       >
         {messages.map((msg, idx) => (
@@ -59,14 +59,14 @@ try {
         ))}
       </div>
 
-      {/* Input Bar */}
+      {/* Input Bar (fixed at bottom in this container) */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
-          backgroundColor: '#343541',
+          backgroundColor: '#343541'
         }}
       >
         <input
@@ -80,24 +80,26 @@ try {
           style={{
             flex: 1,
             marginRight: '10px',
-            padding: '10px',
-            borderRadius: '5px',
+            padding: '12px',
+            borderRadius: '25px',        // More bubble-like
             border: '1px solid #555',
             backgroundColor: '#3f3f46',
             color: '#fff',
             outline: 'none',
+            fontSize: '0.95rem'
           }}
         />
         <button
           onClick={sendMessage}
           style={{
-            padding: '10px 20px',
+            padding: '12px 20px',
             border: 'none',
-            borderRadius: '5px',
+            borderRadius: '25px',
             backgroundColor: '#19c37d',
             color: '#fff',
             fontWeight: 'bold',
             cursor: 'pointer',
+            fontSize: '0.95rem',
             transition: 'background-color 0.2s ease-in-out'
           }}
         >

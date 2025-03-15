@@ -14,7 +14,9 @@ function ChatMessage({ role, content }) {
     backgroundColor: isUser ? '#3f3f46' : '#444654',
     whiteSpace: 'pre-wrap',
     lineHeight: '1.4',
-    fontSize: '0.95rem'
+    fontSize: '0.95rem',
+    // Fade-in animation
+    animation: 'fadeIn 0.4s ease-in-out'
   };
 
   return (
