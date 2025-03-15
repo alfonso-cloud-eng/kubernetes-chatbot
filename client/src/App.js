@@ -7,7 +7,7 @@ function App() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',       // Fill the entire #root (which is 100vh)
+        height: '100%',    // Fill #root (which is 100vh)
         overflow: 'hidden'
       }}
     >
@@ -18,12 +18,14 @@ function App() {
           textAlign: 'center',
           marginBottom: '1rem',
           color: '#fff',
-          flexShrink: 0       // Prevent the heading from shrinking
+          flexShrink: 0
         }}
       >
         ChatGPT Chatbot
       </h1>
-      <div style={{ flex: 1 }}>
+
+      {/* Container that Chat occupies */}
+      <div style={{ flex: 1, position: 'relative' }}>
         <Chat />
       </div>
     </div>

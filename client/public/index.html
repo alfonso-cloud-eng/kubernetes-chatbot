@@ -11,30 +11,25 @@
       rel="stylesheet"
     />
     <style>
-      /* Reset & Global Styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
       html, body {
         width: 100%;
         height: 100%;
+        margin: 0;
+        padding: 0;
       }
       body {
         font-family: 'Poppins', sans-serif;
-        background-color: #343541; /* Dark background */
+        background-color: #343541;
         color: #fff;
-        overflow: hidden; 
+        overflow: hidden; /* remove if you prefer scrolling the entire page */
       }
       #root {
-        height: 100vh; /* Occupies full viewport height */
+        height: 100vh; /* full viewport height */
         max-width: 900px;
         margin: 0 auto;
         display: flex;
         flex-direction: column;
       }
-      /* Keyframes for fade-in animation */
       @keyframes fadeIn {
         0% {
           opacity: 0;
@@ -45,7 +40,6 @@
           transform: translateY(0);
         }
       }
-      /* Mobile adjustments: slightly bigger font */
       @media (max-width: 600px) {
         body {
           font-size: 1.05rem;

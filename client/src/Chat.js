@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatMessage';
 
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const messagesContainerRef = useRef(null);
+  const messageListRef = useRef(null);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -18,6 +18,7 @@ function Chat() {
     const newMessages = [...messages, { role: 'user', content: input.trim() }];
     setMessages(newMessages);
     setInput('');
+    
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -38,21 +39,27 @@ function Chat() {
   return (
     <div
       style={{
-        position: 'relative',
-        height: '100%',              // Fixed height (inherited from parent)
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         backgroundColor: '#444654',
         borderRadius: '8px',
         overflow: 'hidden'
       }}
     >
-      {/* Scrollable Messages Area */}
+      {/* Scrollable message area pinned to top, leaving space for input bar */}
       <div
-        ref={messagesContainerRef}
+        ref={messageListRef}
         style={{
-          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 60, // space for input bar (approx. 60px tall)
           overflowY: 'auto',
           padding: '16px',
-          paddingBottom: '70px',    // Extra padding to ensure the last message isn't hidden behind the input bar
           boxSizing: 'border-box'
         }}
       >
@@ -61,18 +68,20 @@ function Chat() {
         ))}
       </div>
 
-      {/* Fixed Input Bar */}
+      {/* Fixed input bar pinned to bottom */}
       <div
         style={{
           position: 'absolute',
-          bottom: 0,
           left: 0,
           right: 0,
+          bottom: 0,
           display: 'flex',
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
-          backgroundColor: '#343541'
+          backgroundColor: '#343541',
+          boxSizing: 'border-box',
+          height: 60 // approximate input bar height
         }}
       >
         <input
