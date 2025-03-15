@@ -79,10 +79,11 @@ function Chat() {
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
-          paddingBottom: 'calc(10px + env(safe-area-inset-bottom))',
+          // Increase bottom padding with safe-area inset and adjust height accordingly.
+          paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 20px))',
           backgroundColor: '#343541',
           boxSizing: 'border-box',
-          height: 60 // approximate input bar height
+          height: 'calc(60px + env(safe-area-inset-bottom, 20px))'
         }}
       >
         <input

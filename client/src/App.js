@@ -13,11 +13,12 @@ function App() {
     >
       <h1
         style={{
-          fontSize: '1.5rem',
+          fontSize: '1.6rem',
           fontWeight: '700',
           textAlign: 'center',
           color: '#fff',
-          flexShrink: 0
+          flexShrink: 0,
+          marginBottom: '-1em'
         }}
       >
         ChatGPT Chatbot
@@ -25,7 +26,7 @@ function App() {
       <p
         style={{
           textAlign: 'center',
-          color: '#ffffff',
+          color: '#a2a2a2',
           marginBottom: '1rem',
           fontSize: '0.9rem'
         }}
