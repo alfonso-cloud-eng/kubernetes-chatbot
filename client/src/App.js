@@ -44,10 +44,10 @@ function App() {
           textAlign: 'center',
           color: '#a2a2a2',
           marginBottom: '1rem',
-          lineHeight: '4em'
+          lineHeight: '1em'
         }}
       >
-        <br/>
+        <br/><br/><br/><br/>
       </p>
     </div>
   );
