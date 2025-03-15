@@ -7,7 +7,7 @@ function App() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',    // Fill #root's height
+        height: '100%',    // Fill #root (which is 100vh)
         overflow: 'hidden'
       }}
     >
@@ -16,24 +16,16 @@ function App() {
           fontSize: '1.5rem',
           fontWeight: '700',
           textAlign: 'center',
-          marginBottom: '0.25rem',
+          marginBottom: '1rem',
           color: '#fff',
           flexShrink: 0
         }}
       >
         ChatGPT Chatbot
       </h1>
-      <p
-        style={{
-          textAlign: 'center',
-          color: '#fff',
-          marginBottom: '1rem',
-          fontSize: '1rem'
-        }}
-      >
-        by alfonso.cloud.eng@gmail.com<br/>Hosted on Google Kubernetes Engine
-      </p>
-      <div style={{ flex: 1 }}>
+
+      {/* Container that Chat occupies */}
+      <div style={{ flex: 1, position: 'relative' }}>
         <Chat />
       </div>
     </div>

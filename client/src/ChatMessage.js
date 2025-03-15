@@ -13,7 +13,7 @@ function ChatMessage({ role, content }) {
     backgroundColor: isUser ? '#3f3f46' : '#444654',
     whiteSpace: 'pre-wrap',
     lineHeight: '1.4',
-    fontSize: '1.2rem',         // Increased font size for messages
+    fontSize: '1rem',         // Bigger font for readability
     animation: 'fadeIn 0.4s ease-in-out'
   };
 
