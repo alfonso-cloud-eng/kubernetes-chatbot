@@ -31,7 +31,7 @@ function App() {
           fontSize: '1rem'
         }}
       >
-        by alfonso.cloud.eng@gmail.com Hosted on Google Kubernetes Engine
+        by alfonso.cloud.eng@gmail.com<br/>Hosted on Google Kubernetes Engine
       </p>
       <div style={{ flex: 1 }}>
         <Chat />
