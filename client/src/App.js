@@ -27,7 +27,8 @@ function App() {
         style={{
           textAlign: 'center',
           color: '#a2a2a2',
-          marginBottom: '1rem',
+          marginBottom: '1.1rem',
+          marginTop: '0rem',
           fontSize: '0.9rem'
         }}
       >
@@ -38,6 +39,17 @@ function App() {
       <div style={{ flex: 1, position: 'relative' }}>
         <Chat />
       </div>
+      <p
+        style={{
+          textAlign: 'center',
+          color: '#a2a2a2',
+          marginBottom: '1rem',
+          fontSize: '9.9rem',
+          lineHeight: '6em'
+        }}
+      >
+        <br/>
+      </p>
     </div>
   );
 }
