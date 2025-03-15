@@ -4,14 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ChatGPT Chatbot</title>
-
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
-
     <style>
       /* Reset & Global Styles */
       * {
@@ -19,32 +17,23 @@
         padding: 0;
         box-sizing: border-box;
       }
-
-      /* Ensure html/body are 100% so we can do a full-height container */
       html, body {
         width: 100%;
         height: 100%;
-        margin: 0;
-        padding: 0;
       }
-
       body {
         font-family: 'Poppins', sans-serif;
         background-color: #343541; /* Dark background */
         color: #fff;
-        /* Overflow hidden can help on mobile, but if you need body scrolling, remove it */
         overflow: hidden; 
       }
-
-      /* The #root container takes up the full screen height */
       #root {
-        height: 100vh;         /* Occupies full viewport height */
-        display: flex;
-        flex-direction: column;
+        height: 100vh; /* Occupies full viewport height */
         max-width: 900px;
         margin: 0 auto;
+        display: flex;
+        flex-direction: column;
       }
-
       /* Keyframes for fade-in animation */
       @keyframes fadeIn {
         0% {
@@ -56,8 +45,7 @@
           transform: translateY(0);
         }
       }
-
-      /* Mobile adjustments: bigger font, a more “app-like” vibe */
+      /* Mobile adjustments: slightly bigger font */
       @media (max-width: 600px) {
         body {
           font-size: 1.05rem;

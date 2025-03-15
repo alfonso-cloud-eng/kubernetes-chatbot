@@ -13,17 +13,12 @@ function ChatMessage({ role, content }) {
     backgroundColor: isUser ? '#3f3f46' : '#444654',
     whiteSpace: 'pre-wrap',
     lineHeight: '1.4',
-    fontSize: '1rem',         // Slightly larger font
+    fontSize: '1rem',         // Bigger font for readability
     animation: 'fadeIn 0.4s ease-in-out'
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: isUser ? 'flex-end' : 'flex-start'
-      }}
-    >
+    <div style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start' }}>
       <div style={messageStyle}>
         <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>
           {role.toUpperCase()}

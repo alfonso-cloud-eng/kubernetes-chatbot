@@ -4,22 +4,20 @@ import ChatMessage from './ChatMessage';
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const messagesEndRef = useRef(null);
+  const messageContainerRef = useRef(null);
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-
     const newMessages = [...messages, { role: 'user', content: input.trim() }];
     setMessages(newMessages);
     setInput('');
-
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -28,10 +26,7 @@ function Chat() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: data.content }
-        ]);
+        setMessages((prev) => [...prev, { role: 'assistant', content: data.content }]);
       } else {
         console.error(data.error);
       }
@@ -45,38 +40,37 @@ function Chat() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',       // Fill the parent container's height
+        height: '100%',            // Fixed height container
         backgroundColor: '#444654',
         borderRadius: '8px',
         overflow: 'hidden'
       }}
     >
-      {/* The scrollable area with messages */}
+      {/* Scrollable messages area */}
       <div
+        ref={messageContainerRef}
         style={{
-          flex: 1,                     // Takes all remaining space above input bar
-          overflowY: 'auto',           // Scroll if messages exceed container
+          flex: 1,               // Fill available space above the input bar
+          overflowY: 'auto',     // Scrollable if messages exceed container
           display: 'flex',
-          flexDirection: 'column',     // Top to bottom
-          justifyContent: 'flex-start',
+          flexDirection: 'column',
+          justifyContent: 'flex-end', // Messages start at the bottom
           padding: '16px'
         }}
       >
         {messages.map((msg, idx) => (
           <ChatMessage key={idx} role={msg.role} content={msg.content} />
         ))}
-        {/* Keep an always-present ref at the bottom to auto-scroll */}
-        <div ref={messagesEndRef} />
       </div>
-
-      {/* The pinned input bar */}
+      {/* Pinned input bar */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           borderTop: '1px solid #3f3f46',
           padding: '10px',
-          backgroundColor: '#343541'
+          backgroundColor: '#343541',
+          flexShrink: 0         // Keep input bar fixed
         }}
       >
         <input
@@ -84,9 +78,7 @@ function Chat() {
           placeholder="Type your message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') sendMessage();
-          }}
+          onKeyDown={(e) => { if (e.key === 'Enter') sendMessage(); }}
           style={{
             flex: 1,
             marginRight: '10px',

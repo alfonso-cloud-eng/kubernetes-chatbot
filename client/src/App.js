@@ -7,8 +7,8 @@ function App() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',      // Fills #root's 100vh
-        overflow: 'hidden'   // Ensures we don't scroll the entire page, only in the chat
+        height: '100%',       // Fill the entire #root (which is 100vh)
+        overflow: 'hidden'
       }}
     >
       <h1
@@ -17,13 +17,12 @@ function App() {
           fontWeight: '700',
           textAlign: 'center',
           marginBottom: '1rem',
-          color: '#fff'
+          color: '#fff',
+          flexShrink: 0       // Prevent the heading from shrinking
         }}
       >
         ChatGPT Chatbot
       </h1>
-
-      {/* The chat takes the remaining space after the heading */}
       <div style={{ flex: 1 }}>
         <Chat />
       </div>
