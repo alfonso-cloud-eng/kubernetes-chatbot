@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const messageListRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -18,7 +18,6 @@ function Chat() {
     const newMessages = [...messages, { role: 'user', content: input.trim() }];
     setMessages(newMessages);
     setInput('');
-    
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -49,15 +48,15 @@ function Chat() {
         overflow: 'hidden'
       }}
     >
-      {/* Scrollable message area pinned to top, leaving space for input bar */}
+      {/* Scrollable Messages Area */}
       <div
-        ref={messageListRef}
+        ref={messagesContainerRef}
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          bottom: 60, // space for input bar (approx. 60px tall)
+          bottom: 60, // Reserve space for the input bar
           overflowY: 'auto',
           padding: '16px',
           boxSizing: 'border-box'
@@ -68,7 +67,7 @@ function Chat() {
         ))}
       </div>
 
-      {/* Fixed input bar pinned to bottom */}
+      {/* Fixed Input Bar */}
       <div
         style={{
           position: 'absolute',
@@ -81,7 +80,7 @@ function Chat() {
           padding: '10px',
           backgroundColor: '#343541',
           boxSizing: 'border-box',
-          height: 60 // approximate input bar height
+          height: 60
         }}
       >
         <input
@@ -99,7 +98,7 @@ function Chat() {
             backgroundColor: '#3f3f46',
             color: '#fff',
             outline: 'none',
-            fontSize: '1rem'
+            fontSize: '1.1rem' // Increased font size for input text
           }}
         />
         <button
@@ -112,7 +111,7 @@ function Chat() {
             color: '#fff',
             fontWeight: 'bold',
             cursor: 'pointer',
-            fontSize: '1rem',
+            fontSize: '1.1rem',  // Increased font size for button text
             transition: 'background-color 0.2s ease-in-out'
           }}
         >
