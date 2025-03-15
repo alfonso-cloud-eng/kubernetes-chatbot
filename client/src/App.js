@@ -28,7 +28,7 @@ function App() {
           textAlign: 'center',
           color: '#a2a2a2',
           marginBottom: '1.1rem',
-          marginTop: '0rem',
+          marginTop: '0.5rem',
           fontSize: '0.9rem'
         }}
       >
@@ -44,8 +44,7 @@ function App() {
           textAlign: 'center',
           color: '#a2a2a2',
           marginBottom: '1rem',
-          fontSize: '9.9rem',
-          lineHeight: '6em'
+          lineHeight: '1em'
         }}
       >
         <br/>
