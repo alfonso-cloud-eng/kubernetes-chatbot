@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ChatMessage from './ChatMessage';
 
 function Chat() {
@@ -6,7 +6,7 @@ function Chat() {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
 
-  // This ensures that on new messages, we scroll to the bottom of the container
+  // Scroll to bottom on new messages
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -45,34 +45,31 @@ function Chat() {
       style={{
         display: 'flex',
         flexDirection: 'column',
+        height: '100%',      // Fills the parent's space (App -> #root)
         backgroundColor: '#444654',
         borderRadius: '8px',
-        margin: '0 10px',
-        flex: 1,             // Fill remaining vertical space after heading
-        overflow: 'hidden',  // No extra scrolling on container
-        position: 'relative'
+        overflow: 'hidden',  // The container won't resize, old msgs scroll
       }}
     >
-      {/* Messages Container (column-reverse) */}
+      {/* Messages container */}
       <div
         style={{
+          flex: 1,                // Expands to fill available vertical space
+          overflowY: 'auto',      // Scrollable if messages exceed space
           display: 'flex',
-          flexDirection: 'column-reverse',
-          flex: 1,
-          overflowY: 'auto',
-          padding: '16px',
+          flexDirection: 'column', 
+          justifyContent: 'flex-end', // Align messages at the bottom
+          padding: '16px'
         }}
       >
-        {/* Render messages in normal order,
-            but the container is reversed so the newest appear at bottom */}
         {messages.map((msg, idx) => (
           <ChatMessage key={idx} role={msg.role} content={msg.content} />
         ))}
-        {/* A dummy ref at the top (because reversed) to keep auto-scroll logic simpler */}
+        {/* Dummy div to ensure we can scroll to the bottom */}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Bar pinned at bottom */}
+      {/* Input bar pinned at bottom */}
       <div
         style={{
           display: 'flex',
@@ -93,7 +90,7 @@ function Chat() {
           style={{
             flex: 1,
             marginRight: '10px',
-            padding: '12px',
+            padding: '14px',
             borderRadius: '25px',
             border: '1px solid #555',
             backgroundColor: '#3f3f46',
@@ -105,7 +102,7 @@ function Chat() {
         <button
           onClick={sendMessage}
           style={{
-            padding: '12px 20px',
+            padding: '14px 22px',
             border: 'none',
             borderRadius: '25px',
             backgroundColor: '#19c37d',
