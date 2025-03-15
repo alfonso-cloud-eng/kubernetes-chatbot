@@ -3,7 +3,6 @@ import React from 'react';
 function ChatMessage({ role, content }) {
   const isUser = role === 'user';
 
-  // ChatGPT uses slightly different shades for user vs. assistant
   const messageStyle = {
     alignSelf: isUser ? 'flex-end' : 'flex-start',
     margin: '8px 0',
@@ -14,8 +13,7 @@ function ChatMessage({ role, content }) {
     backgroundColor: isUser ? '#3f3f46' : '#444654',
     whiteSpace: 'pre-wrap',
     lineHeight: '1.4',
-    fontSize: '0.95rem',
-    // Fade-in animation
+    fontSize: '1rem',         // Slightly larger font
     animation: 'fadeIn 0.4s ease-in-out'
   };
 

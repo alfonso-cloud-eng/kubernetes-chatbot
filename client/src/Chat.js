@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ChatMessage from './ChatMessage';
 
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const messagesEndRef = useRef(null);
+
+  // This ensures that on new messages, we scroll to the bottom of the container
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -37,29 +45,34 @@ function Chat() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#444654', // ChatGPT-like darker panel
+        backgroundColor: '#444654',
         borderRadius: '8px',
-        flex: 1,                // Takes remaining vertical space
-        overflow: 'hidden',     // Hide overflow except for the scrollable area
+        margin: '0 10px',
+        flex: 1,             // Fill remaining vertical space after heading
+        overflow: 'hidden',  // No extra scrolling on container
         position: 'relative'
       }}
     >
-      {/* Messages Container */}
+      {/* Messages Container (column-reverse) */}
       <div
         style={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
           flex: 1,
-          padding: '16px',
           overflowY: 'auto',
-          // On mobile, we want a bit more “app” feeling
-          // so we adjust spacing if needed. This is optional.
+          padding: '16px',
         }}
       >
+        {/* Render messages in normal order,
+            but the container is reversed so the newest appear at bottom */}
         {messages.map((msg, idx) => (
           <ChatMessage key={idx} role={msg.role} content={msg.content} />
         ))}
+        {/* A dummy ref at the top (because reversed) to keep auto-scroll logic simpler */}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Bar (fixed at bottom in this container) */}
+      {/* Input Bar pinned at bottom */}
       <div
         style={{
           display: 'flex',
@@ -81,12 +94,12 @@ function Chat() {
             flex: 1,
             marginRight: '10px',
             padding: '12px',
-            borderRadius: '25px',        // More bubble-like
+            borderRadius: '25px',
             border: '1px solid #555',
             backgroundColor: '#3f3f46',
             color: '#fff',
             outline: 'none',
-            fontSize: '0.95rem'
+            fontSize: '1rem'
           }}
         />
         <button
@@ -99,7 +112,7 @@ function Chat() {
             color: '#fff',
             fontWeight: 'bold',
             cursor: 'pointer',
-            fontSize: '0.95rem',
+            fontSize: '1rem',
             transition: 'background-color 0.2s ease-in-out'
           }}
         >
