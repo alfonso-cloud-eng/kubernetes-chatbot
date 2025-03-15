@@ -85,16 +85,16 @@ jobs:
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
           GCP_REGION: ${{ secrets.GCP_REGION }}
-          CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+          CLUSTER_NAME: chatbot-autopilot-cluster
           TF_VAR_deployer_service_account_email: ${{ secrets.DEPLOYER_SERVICE_ACCOUNT_EMAIL }}
           TF_VAR_gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
           TF_VAR_gcp_project: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_gcp_region: ${{ secrets.GCP_REGION }}
-          TF_VAR_cluster_name: ${{ secrets.CLUSTER_NAME }}
+          TF_VAR_cluster_name: chatbot-autopilot-cluster
         run: |
-          if gcloud container clusters describe "${CLUSTER_NAME}" --region "${GCP_REGION}" --project "${GCP_PROJECT_ID}" >/dev/null 2>&1; then
+          if gcloud container clusters describe chatbot-autopilot-cluster --region "${GCP_REGION}" --project "${GCP_PROJECT_ID}" >/dev/null 2>&1; then
             echo "Cluster exists, importing into Terraform state..."
-            terraform import google_container_cluster.chatbot_cluster projects/${GCP_PROJECT_ID}/locations/${GCP_REGION}/clusters/${CLUSTER_NAME} || echo "Import failed (maybe already imported)"
+            terraform import google_container_cluster.chatbot_cluster projects/${GCP_PROJECT_ID}/locations/${GCP_REGION}/clusters/chatbot-autopilot-cluster || echo "Import failed (maybe already imported)"
           else
             echo "Cluster does not exist; Terraform will create it."
           fi
@@ -106,7 +106,7 @@ jobs:
           TF_VAR_gcp_credentials: ${{ secrets.GCP_CREDENTIALS }}
           TF_VAR_gcp_project: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_gcp_region: ${{ secrets.GCP_REGION }}
-          TF_VAR_cluster_name: ${{ secrets.CLUSTER_NAME }}
+          TF_VAR_cluster_name: chatbot-autopilot-cluster
         run: terraform apply -auto-approve
 
       #################################################
@@ -114,7 +114,7 @@ jobs:
       #################################################
       - name: Get GKE Credentials
         run: |
-          gcloud container clusters get-credentials ${{ secrets.CLUSTER_NAME }} \
+          gcloud container clusters get-credentials chatbot-autopilot-cluster \
             --region ${{ secrets.GCP_REGION }} \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
