@@ -1,6 +1,6 @@
 # Kubernetes Chatbot on GCP
 
-> **"The cool thing about this project is not the chatbot itself—you can do this with any type of app. With just one push of a button (okay, maybe a few more steps...), you can have your own containerized app deployed on GCP, available to the internet, and scalable via Kubernetes!"**  
+> The cool thing about this project is not the chatbot itself—you can do this with any type of app. With just one push of a button (okay, maybe a few more steps...), you can have your own containerized app deployed on GCP, available to the internet, and scalable via Kubernetes! 
 
 This repository is a complete example of how to deploy an application (in this case, a ChatGPT-based chatbot) to Google Cloud Platform (GCP) using:
 
