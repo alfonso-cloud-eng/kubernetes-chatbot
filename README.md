@@ -17,7 +17,7 @@ On **every commit** to the `main` branch, the workflow will:
 2. **Build & push** a Docker image to Docker Hub
 3. **Provision or update** the GKE Autopilot cluster using Terraform.  
 4. **Deploy** the container image and Kubernetes manifests to that cluster.  
-5. **Wait** for the external IP, then post a comment with the link in a “Deployment Status” GitHub Issue.
+5. **Wait** for the external IP, then post a comment with the link to access the app.
 - This means each time you push changes, the pipeline updates the GCP environment automatically.
 
 ![Architecture Diagram](./images/architecture-diagram.png)
@@ -101,8 +101,9 @@ These are only needed if you want to **build and push** your own Docker image. I
    - Once it finishes, go to the **Issues** tab in your GitHub repo.
    - Inside **Deployment Status**, you’ll see a comment with the link to the newly deployed application.
 
-5. **Access the App**  
-   - Click the link from the comment, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
+5. **Access the App**
+   - After completion, look for the step labeled **`Show External IP`** near the end of the workflow.
+   - Click the link, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
 
 ## Developing your own Custom App
 
