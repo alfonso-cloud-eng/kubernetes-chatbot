@@ -30,10 +30,10 @@ On **every commit** to the `main` branch, the workflow will:
 
 2. **Service Account**  
    - In your GCP project, create a **service account** with the following roles:
-     - **Compute Viewer**  
-     - **Kubernetes Engine Admin**  
-     - **Service Account Admin**  
-     - **Service Usage Admin**  
+     - **Compute Viewer** (it needs to see the default compute engine service account) 
+     - **Kubernetes Engine Admin**  (it needs to create/manage/update the cluster)
+     - **Service Account Admin**  (it needs to grant itself access to the default compute engine service account)
+     - **Service Usage Admin**  (it needs to enable the appropiate API)
    - Generate a **JSON key** for this service account:
      1. Go to **IAM & Admin** > **Service Accounts** in the GCP Console.
      2. Click on the service account.
