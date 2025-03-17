@@ -94,6 +94,7 @@ These are only needed if you want to **build and push** your own Docker image. I
 3. **Watch GitHub Actions**  
    - Go to **Actions** tab in your repo.
    - Click the latest workflow to see how the architecture is being built in real-time.
+   - Click **`build_and_deploy`**
    - The first run may take up to 10 minutes (Terraform is creating the cluster).
 
 4. **Check Deployment Status**  
