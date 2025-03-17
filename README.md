@@ -102,7 +102,7 @@ These are only needed if you want to **build and push** your own Docker image. I
    - Inside **Deployment Status**, you’ll see a comment with the link to the newly deployed application.
 
 5. **Access the App**
-   - After completion, look for the step labeled **`Show External IP`** near the end of the workflow.
+   - After completion, look for the step labeled **`***Show External IP***`** near the end of the workflow.
    - Click the link, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
 
 6. **(Optional) Explore Your GKE Cluster**
