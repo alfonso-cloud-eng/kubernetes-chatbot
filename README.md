@@ -30,10 +30,10 @@ On **every commit** to the `main` branch, the workflow will:
 
 2. **Service Account**  
    - In your GCP project, create a **service account** with the following roles:
-     - **Compute Viewer** (it needs to see the default compute engine service account) 
      - **Kubernetes Engine Admin**  (it needs to create/manage/update the cluster)
+     - **Compute Viewer** (it needs to see the default compute engine service account) 
      - **Service Account Admin**  (it needs to grant itself access to the default compute engine service account)
-     - **Service Usage Admin**  (it needs to enable the appropiate API)
+     - **Service Usage Admin**  (it needs to enable the appropiate APIs)
    - Generate a **JSON key** for this service account:
      1. Go to **IAM & Admin** > **Service Accounts** in the GCP Console.
      2. Click on the service account.
@@ -44,8 +44,9 @@ On **every commit** to the `main` branch, the workflow will:
 3. **(Optional) Docker Hub Account**  
    - If you want to build & push your own custom Docker image:
      1. [Create a Docker Hub account](https://hub.docker.com/) if you don’t have one.
-     2. Create a **repository** (e.g., `username/kubernetes-chatbot`).
+     2. Create a **public repository** (e.g., `username/kubernetes-chatbot`).
      3. Generate a **Personal Access Token** (in **Account Settings** > **Security** > **New Access Token**) with **read, write, delete** permissions.
+     4. Copy and save the access token key; you’ll need it later.
    - If you prefer not to push your own images, you can skip this. The workflow will use a default image from this repo’s Docker Hub (but that means you won’t see your changes if you modify the code).
 
 ## Fork & Configure the Repository
@@ -61,13 +62,13 @@ On **every commit** to the `main` branch, the workflow will:
   - The email of the service account you created (e.g., `my-service-account@my-project.iam.gserviceaccount.com`).
 
 - **`GCP_CREDENTIALS`**  
-  - Paste the **entire JSON file** contents of your service account key into this secret.
+  - Paste the **entire JSON file** contents of your service account key into this secret..
 
 - **`GCP_PROJECT_ID`**  
   - Your **GCP project ID** (e.g., `my-awesome-project`).
 
 - **`GCP_REGION`**  
-  - Your chosen GCP region, e.g. `europe-west1`.
+  - Choose a GCP region, e.g. `europe-west1`.
 
 - **`OPENAI_API_KEY`**  
   - Your **OpenAI API key** (retrieve from [OpenAI’s API page](https://platform.openai.com/account/api-keys)) so the chatbot can communicate with ChatGPT.
@@ -84,7 +85,7 @@ These are only needed if you want to **build and push** your own Docker image. I
 
 ## Deploying the Architecture
 
-1. **Commit to main branch**  
+1. **Commit to `main` branch**  
    - After setting all secrets, any commit or push to the `main` branch triggers the workflow. A simple option is to edit the `README.md` file and push the change (do a false commit).
 
 2. **Watch GitHub Actions**  
@@ -99,7 +100,7 @@ These are only needed if you want to **build and push** your own Docker image. I
 4. **Access the App**  
    - Click the link from the comment, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
 
-## Making Changes
+## Developing your own Custom App
 
 - **Modify the Chatbot or Build a Different App**  
   1. If you want a custom Docker image with your code changes, provide the **Docker Hub** secrets. 
@@ -108,6 +109,9 @@ These are only needed if you want to **build and push** your own Docker image. I
 
 - **No Docker Hub?**  
   - You can keep using the default image from this repo’s Docker Hub if you only want to deploy the existing code.
+
+- **Modify the infrastructure**  
+  - You can edit the Terraform and Kubernetes manifests to fit your needs, but doing so may require changes to the workflow.
 
 ## Conclusion
 
