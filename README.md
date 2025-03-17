@@ -5,10 +5,10 @@
 This repository is a complete example of how to deploy an application (in this case, a ChatGPT-based chatbot) to Google Cloud Platform (GCP) using:
 
 - **Node.js & React** to build the application.
-- **Docker Hub** for container images (optional).
+- **Docker Hub** to build the container images.
 - **GitHub Actions** for CI/CD.
 - **Terraform** to provision a GKE Autopilot cluster.
-- **Kubernetes manifests** to deploy the containerized app.
+- **Kubernetes manifests** for deploying the containerized app on GKE to ensure scalable infrastructure.
 
 ## Deployment
 
@@ -95,11 +95,11 @@ These are only needed if you want to **build and push** your own Docker image. I
    - Go to **Actions** tab in your repo.
    - Click the latest workflow to see how the architecture is being built in real-time.
    - Click **`build_and_deploy`**
-   - The first run may take up to 10 minutes (Terraform is creating the cluster).
+   - The first run may take up to 15 minutes (Terraform is creating the cluster).
 
 4. **Check Deployment Status**  
-   - Once it finishes, go to **Issues** > find **Deployment Status**.
-   - Inside that issue, you’ll see a comment with the link to the newly deployed application.
+   - Once it finishes, go to the **Issues** tab in your GitHub repo.
+   - Inside **Deployment Status**, you’ll see a comment with the link to the newly deployed application.
 
 5. **Access the App**  
    - Click the link from the comment, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
