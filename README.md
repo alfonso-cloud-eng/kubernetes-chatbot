@@ -18,7 +18,7 @@ On **every commit** to the `main` branch, the workflow will:
 3. **Provision or update** the GKE Autopilot cluster using Terraform.  
 4. **Deploy** the container image and Kubernetes manifests to that cluster.  
 5. **Wait** for the external IP, then post a comment with the link in a “Deployment Status” GitHub Issue.
-- This means each time you push changes, the pipeline updates the GCP environment automatically.
+This means each time you push changes, the pipeline updates the GCP environment automatically.
 
 ![Architecture Diagram](./images/architecture-diagram.png)
 
