@@ -28,9 +28,9 @@ On **every commit** to the `main` branch, the workflow will:
    - [Create a GCP Account](https://cloud.google.com) if you don’t have one.
    - Create (or use) a **GCP project**.
 
-2. [**Enable the Compute Engine API**](https://console.cloud.google.com/apis/library/compute.googleapis.com
-)
-   - Check the project box at the top and make sure you are in you are inside the project in which you want to deploy the architecture.
+2. [**Enable the Compute Engine API**](https://console.cloud.google.com/apis/library/compute.googleapis.com)
+   - Make sure you are inside the project where you want to deploy the architecture (check the project selector at the top).
+   - Click `Enable`
 
 3. **Service Account**  
    - In your GCP project, create a **service account** with the following roles:
