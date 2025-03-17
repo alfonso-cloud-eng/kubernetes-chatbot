@@ -20,6 +20,8 @@ On **every commit** to the `main` branch, the workflow will:
 5. **Wait** for the external IP, then post a comment with the link in a “Deployment Status” GitHub Issue.
 - This means each time you push changes, the pipeline updates the GCP environment automatically.
 
+![Architecture Diagram](./images/architecture-diagram.png)
+
 ## Prerequisites
 
 1. **Google Cloud Account**  
