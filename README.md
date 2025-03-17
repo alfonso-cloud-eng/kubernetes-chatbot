@@ -97,15 +97,11 @@ These are only needed if you want to **build and push** your own Docker image. I
    - Click **`build_and_deploy`**
    - The first run may take up to 15 minutes (Terraform is creating the cluster).
 
-4. **Check Deployment Status**  
-   - Once it finishes, go to the **Issues** tab in your GitHub repo.
-   - Inside **Deployment Status**, you’ll see a comment with the link to the newly deployed application.
-
-5. **Access the App**
+4. **Access the App**
    - After completion, look for the step labeled **`***Show External IP***`** near the end of the workflow.
    - Click the link, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
 
-6. **(Optional) Explore Your GKE Cluster**
+5. **(Optional) Explore Your GKE Cluster**
    - Visit the Google Cloud Console and navigate to **Kubernetes Engine** > **Clusters**.
    - There, you can inspect your deployed Autopilot GKE cluster.
 
