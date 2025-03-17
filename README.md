@@ -29,11 +29,12 @@ On **every commit** to the `main` branch, the workflow will:
    - Create (or use) a **GCP project**.
 
 2. **Service Account**  
-   - In your GCP project, create a **service account** with the following roles:
+   - In your GCP project, go to **IAM & Admin** > **Service Accounts** and create a **service account** with the following roles:
      - **Kubernetes Engine Admin**  (it needs to create/manage/update the cluster)
      - **Compute Viewer** (it needs to see the default compute engine service account) 
      - **Service Account Admin**  (it needs to grant itself access to the default compute engine service account)
      - **Service Usage Admin**  (it needs to enable the appropiate APIs)
+     - Click `DONE`
    - Generate a **JSON key** for this service account:
      1. Go to **IAM & Admin** > **Service Accounts** in the GCP Console.
      2. Click on the service account.
@@ -86,10 +87,10 @@ These are only needed if you want to **build and push** your own Docker image. I
 ## Deploying the Architecture
 
 1. **Enable GitHub Actions**  
-   - In your forked repo, go to the Actions tab and enable workflows if prompted.
+   - After setting all secrets, go to the Actions tab in your forked repo and enable workflows if prompted.
 
 2. **Commit to `main` branch**  
-   - After setting all secrets, any commit or push to the `main` branch triggers the workflow. You can edit the `README.md` file and push the change (do a false commit).
+   - Any commit or push to the `main` branch triggers the workflow. You can edit the `README.md` file and push the change (do a false commit).
 
 3. **Watch GitHub Actions**  
    - Go to **Actions** tab in your repo.
