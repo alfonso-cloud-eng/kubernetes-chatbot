@@ -85,19 +85,22 @@ These are only needed if you want to **build and push** your own Docker image. I
 
 ## Deploying the Architecture
 
-1. **Commit to `main` branch**  
-   - After setting all secrets, any commit or push to the `main` branch triggers the workflow. A simple option is to edit the `README.md` file and push the change (do a false commit).
+1. **Enable GitHub Actions**  
+   - In your forked repo, go to the Actions tab and enable workflows if prompted.
 
-2. **Watch GitHub Actions**  
+2. **Commit to `main` branch**  
+   - After setting all secrets, any commit or push to the `main` branch triggers the workflow. You can edit the `README.md` file and push the change (do a false commit).
+
+3. **Watch GitHub Actions**  
    - Go to **Actions** tab in your repo.
    - Click the latest workflow to see how the architecture is being built in real-time.
    - The first run may take up to 10 minutes (Terraform is creating the cluster).
 
-3. **Check Deployment Status**  
+4. **Check Deployment Status**  
    - Once it finishes, go to **Issues** > find **Deployment Status**.
    - Inside that issue, you’ll see a comment with the link to the newly deployed application.
 
-4. **Access the App**  
+5. **Access the App**  
    - Click the link from the comment, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
 
 ## Developing your own Custom App
