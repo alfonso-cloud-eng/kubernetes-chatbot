@@ -39,8 +39,7 @@ On **every commit** to the `main` branch, the workflow will:
      1. Go to **IAM & Admin** > **Service Accounts** in the GCP Console.
      2. Click on the service account.
      3. Click **Keys**, then **Add key** > **Create new key**.
-     4. Choose **JSON** and download the file.
-   - Save that JSON file locally; you’ll need its contents soon.
+     4. Choose **JSON** and download the file. Save that JSON file locally; you’ll need its contents soon.
 
 3. **(Optional) Docker Hub Account**  
    - If you want to build & push your own custom Docker image:
