@@ -5,7 +5,7 @@ metadata:
   labels:
     app: chatbot
 spec:
-  replicas: 2
+  replicas: 2  # This is the baseline; HPA will scale above this as needed.
   selector:
     matchLabels:
       app: chatbot
@@ -19,8 +19,15 @@ spec:
         image: ${DOCKER_IMAGE}  # Set via envsubst in your workflow
         imagePullPolicy: Always
         ports:
-          - containerPort: 80
+          - containerPort: 80    # Your server now listens on port 80 for both static files and API
             name: web
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
         env:
           - name: NODE_ENV
             value: production

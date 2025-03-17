@@ -137,6 +137,7 @@ jobs:
           export DOCKER_IMAGE=${{ steps.set-image.outputs.docker_image }}
           envsubst < k8s/deployment.yaml | kubectl apply -f -
           kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/hpa.yaml
 
       - name: Restart Deployment to make updates
         run: kubectl rollout restart deployment/chatbot-deployment
