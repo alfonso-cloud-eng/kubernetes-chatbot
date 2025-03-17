@@ -160,7 +160,7 @@ jobs:
           echo "External IP not found after waiting"
           exit 1
 
-      - name: Show External IP
+      - name: "***Show External IP***"
         if: always()
         run: |
             echo "************************************************************"
