@@ -100,7 +100,8 @@ These are only needed if you want to **build and push** your own Docker image. I
 4. **Access the App**
    - After completion, look for the step labeled **`***Show External IP***`** near the end of the workflow.
    - Click the link, and you’ll see the **live chatbot** (or your own custom app) hosted on GKE!
-
+   - If the page doesn’t load immediately, wait a couple of minutes — it may take some time for the changes to fully propagate.
+   
 5. **(Optional) Explore Your GKE Cluster**
    - Visit the Google Cloud Console and navigate to **Kubernetes Engine** > **Clusters**.
    - There, you can inspect your deployed Autopilot GKE cluster.
