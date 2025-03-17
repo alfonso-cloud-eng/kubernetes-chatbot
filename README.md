@@ -124,7 +124,6 @@ That’s it! You now have a **CI/CD pipeline** that:
 - Creates or updates a GKE cluster in your own GCP project.
 - Deploys a Docker container (this chatbot by default, or your own).
 - Exposes it to the internet behind a LoadBalancer.
-- Shows the external link in the **Deployment Status** issue whenever you push.
 
 **Enjoy your scalable, auto-deployed app** powered by Google Kubernetes Engine! If you have questions or run into any issues, feel free to open a discussion or look at the logs in the **Actions** tab for troubleshooting. 
 
