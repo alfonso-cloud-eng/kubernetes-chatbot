@@ -23,4 +23,3 @@ resource "google_container_cluster" "chatbot_cluster" {
   # Enabling Autopilot for this cluster
   enable_autopilot = true
 }
-
